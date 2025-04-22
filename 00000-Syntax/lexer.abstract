@@ -1,0 +1,432 @@
+#setModuleType("Software");
+
+#import("Software.Basic");
+
+#include("lexer.abstract");
+
+peek :: (lexerState : inout LexerState) -> (nextCharacter : ascii) {
+        return lexerState.fileContent[lexerState.pos];
+}
+
+advance :: (lexerState : inout LexerState) -> (nextCharacter : ascii) {
+        return lexerState.fileContent[lexerState.pos++];
+}
+
+tokenize :: (lex : LexerState) -> (tokens : [..] Token, tokenizationOk : bool, tokenizatioError : string) {
+        line, column : usize = 1;
+        for {
+                currentCharacter :: peek(lex);
+	        columnShift : usize = 0;
+                if current {
+                        is == "\n" {
+                                advance(lex);
+                                line++;
+                                column=1;
+                                continue;
+                        }
+                        is == " ", is == "\t" {
+                                while peek(lex) == " " | peek(lex) == "\t" {
+                                        advance(lex);
+                                        columnShift++;
+                                }
+                        }
+                        is == "a"..."Z" {
+                                identifier := "";
+                                for isalnum(peek(lex))) {
+                                        identifier += advance(lex);
+                                        columnShift++;
+                                }
+
+                                if identifier {
+                                        is == "if" {
+                                                tokens.push_back({.If, identifier, line, column});
+                                        }
+                                        is == "case" {
+                                                tokens.push_back({.Case, identifier, line, column});
+                                        }
+                                        is == "for" {
+                                                tokens.push_back({.For, identifier, line, column});
+                                        }
+                                        is == "continue" {
+                                                tokens.push_back({.Continue, identifier, line, column});
+                                        }
+                                        is == "break" {
+                                                tokens.push_back({.Break, identifier, line, column});
+                                        }
+                                        is == "enum" {
+                                                tokens.push_back({.Enum, identifier, line, column});
+                                        }
+                                        is == "union" {
+                                                tokens.push_back({.Union, identifier, line, column});
+                                        }
+                                        is == "choice" {
+                                                tokens.push_back({.Choice, identifier, line, column});
+                                        }
+                                        is == "true" {
+                                                tokens.push_back({.True, identifier, line, column});
+                                        }
+                                        is == "false" {
+                                                tokens.push_back({.False, identifier, line, column});
+                                        }
+                                        is == "not" {
+                                                tokens.push_back({.Not, identifier, line, column});
+                                        }
+                                        is == "and" {
+                                                tokens.push_back({.And, identifier, line, column});
+                                        }
+                                        is == "or" {
+                                                tokens.push_back({.Or, identifier, line, column});
+                                        }
+                                        is == "xor" {
+                                                tokens.push_back({.Xor, identifier, line, column});
+                                        }
+                                        is == "nand" {
+                                                tokens.push_back({.Nand, identifier, line, column});
+                                        }
+                                        is == "nor" {
+                                                tokens.push_back({.Nor, identifier, line, column});
+                                        }
+                                        is == "xnor" {
+                                                tokens.push_back({.Xnor, identifier, line, column});
+                                        }
+                                        is _ {
+                                                tokens.push_back({.Identifier, identifier, line, column});
+                                        }
+                                }
+                        }
+                        is == "0"..."9" {
+                                number := "";
+                                while isdigit(peek(lex)) {
+                                        number += advance(lex);
+                                        columnShift++;
+                                }
+                                tokens.push_back({.Number, number, line, column});
+                        }
+                        is  == "`" {
+        			std::string identifier;
+        			identifier += advance(lex);
+                                for peek(lex) != "`" {
+                                        identifier += advance(lex);
+                                        columnShift++;
+                                }
+        			identifier += advance(lex);
+        			columnShift++;
+        			tokens.push_back({.Exalt, identifier, line, column});
+                        }
+                        is == "~" {
+                                advance(lex);
+        			columnShift++;
+                                tokens.push_back({.Tilde, "~", line, column});
+                        }
+                        is == "!" {
+                                advance(lex);
+                                columnShift++;
+                                if peek(lex) {
+                                        is == "=" {
+                                                advance(lex);
+                				columnShift++;
+                                                tokens.push_back({.NotEqual, "!=", line, column});
+                                        }
+                                        is _ {
+                                                tokens.push_back({.Bang, "!", line, column});
+                                        }
+                                }
+                        }
+                        is == "@" {
+                                advance(lex);
+                                columnShift++;
+                                tokens.push_back({.Adress, "@", line, column});
+                        }
+                        is == "#") {
+                                advance(lex);
+                                columnShift++;
+                                tokens.push_back({.Hash, "#", line, column});
+                        }
+                        is == "$" {
+                                advance(lex);
+                                columnShift++;
+                                tokens.push_back({.Dollar, "$", line, column});
+                        }
+                        is == "%" {
+                                advance(lex);
+                                columnShift++;
+                                tokens.push_back({.Percent, "%", line, column});
+                        }
+                        is == "^" {
+                                advance(lex);
+                                columnShift++;
+                                tokens.push_back({.Hat, "^", line, column});
+                        }
+                        is == "&" {
+                                advance(lex);
+                                columnShift++;
+                                tokens.push_back({.Ampersand, "&", line, column});
+                        }
+                        is == "*" {
+                                advance(lex);
+                                columnShift++;
+                                tokens.push_back({.Asterisk, "*", line, column});
+                        }
+                        is == "-" {
+                                advance(lex);
+                                columnShift++;
+                                if peek(lex) {
+                                        is == "-" {
+                                                advance(lex);
+                                                columnShift++;
+                                                tokens.push_back({.DecrementOperator, "--", line, column});
+                                        }
+                                        is _ {
+                                                tokens.push_back({.Minus, "-", line, column});
+                                        }
+                                }
+                        }
+                        is == "_" {
+                                advance(lex);
+                                columnShift++;
+                                tokens.push_back({.Underscore, "_", line, column});
+                        }
+                        is == "+" {
+                                advance(lex);
+                                columnShift++;
+                                if peek(lex) {
+                                        is == "+") {
+                                                advance(lex);
+                                                columnShift++;
+                                                tokens.push_back({.IncrementOperator, "++", line, column});
+                                        }
+                                        is _ {
+                                                tokens.push_back({.Plus, "+", line, column});
+                                        }
+                                }
+                        }
+                        is == "'") {
+                                advance(lex);
+                                columnShift++;
+                                tokens.push_back({.SingleQuote, "'", line, column});
+                        }
+                        is == "\"" {
+        			stringLitteral := "";
+        			stringLitteral += advance(lex);
+                                while peek(lex) is != "\"" {
+                                        stringLitteral += advance(lex);
+                                        columnShift++;
+                                }
+        			stringLitteral += advance(lex);
+        			columnShift++;
+                                tokens.push_back({.String, stringLitteral, line, column});
+                        }
+                        is == "," {
+                                advance(lex);
+                                columnShift++;
+                                tokens.push_back({.Comma, ",", line, column});
+                        }
+                        is == "/" {
+                                advance(lex);
+                                columnShift++;
+                                tokens.push_back({.ForwardSlash, "/", line, column});
+                        }
+                        is == "?" {
+                                advance(lex);
+                                columnShift++;
+                                tokens.push_back({.QuestionMark, "?", line, column});
+                        }
+                        is == "\\" {
+                                advance(lex);
+                                columnShift++;
+                                tokens.push_back({.BackwardSlash, "\\", line, column});
+                        }
+                        is == "|" {
+                                advance(lex);
+                                columnShift++;
+                                tokens.push_back({.VerticalBar, "|", line, column});
+                        }
+                        is == ":" {
+                                advance(lex);
+                                columnShift++;
+                                if peek(lex) {
+                                        is == ":" {
+                                                advance(lex);
+                                                columnShift++;
+                                                tokens.push_back({.DoubleColon, "::", line, column});
+                                        }
+                                        is == "=") {
+                                                advance(lex);
+                                                columnShift++;
+                                                tokens.push_back({.ColonEqual, ":=", line, column});
+                                        }
+                                        is _ {
+                                                tokens.push_back({.Colon, ":", line, column});
+                                        }
+                                }
+                        }
+                        is == "=") {
+                                advance(lex);
+                                columnShift++;
+                                if peek(lex) {
+                                        is == "=" {
+                                                advance(lex);
+                                                columnShift++;
+                                                tokens.push_back({.IsEqual, "==", line, column});
+                                        }
+                                        is _ {
+                                                tokens.push_back({.Equal, "=", line, column});
+                                        }
+                                }
+                        }
+                        is == "." {
+                                if peek(lex) {
+                                        is == "." {
+                                                advance(lex);
+                                                columnShift++;
+                                                tokens.push_back({.RangeOperator, "..", line, column});
+                                        }
+                                        is _ {
+                                                tokens.push_back({.Dot, ".", line, column});
+                                        }
+                                }
+                        }
+                        is == ";") {
+                                advance(lex);
+                                columnShift++;
+                                tokens.push_back({.SemiColon, ";", line, column});
+                        }
+                        is == "(" {
+                                advance(lex);
+                                columnShift++;
+                                tokens.push_back({.LParen, "(", line, column});
+                        }
+                        is == ")" {
+                                advance(lex);
+                                columnShift++;
+                                tokens.push_back({.RParen, ")", line, column});
+                        }
+                        is == "[" {
+                                advance(lex);
+                                columnShift++;
+                                tokens.push_back({.LBracket, "[", line, column});
+                        }
+                        is == "]" {
+                                advance(lex);
+                                columnShift++;
+                                tokens.push_back({.RBracket, "]", line, column});
+                        }
+                        is == "{" {
+                                advance(lex);
+                                columnShift++;
+                                tokens.push_back({.LCurly, "{", line, column});
+                        }
+                        is == "}" {
+                                advance(lex);
+                                columnShift++;
+                                tokens.push_back({.RAngle, "}", line, column});
+                        }
+                        is == "<" {
+                                advance(lex);
+                                columnShift++;
+                                if peek(lex) {
+                                        is == "<" {
+                                                advance(lex);
+                                                columnShift++;
+                                                tokens.push_back({.LeftShiftOperator, "<<", line, column});
+                                        }
+                                        is _ {
+                                                tokens.push_back({.LAngle, "<", line, column});
+                                        }
+                                }
+                        }
+                        is == ">" {
+                                advance(lex);
+                                columnShift++;
+                                if peek(lex) {
+                                        is == ">" {
+                                                advance(lex);
+                                                columnShift++;
+                                                tokens.push_back({.RightShiftOperator, ">>", line, column});
+                                        }
+                                        is _ {
+                                                tokens.push_back({.RAngle, ">", line, column});
+                                        }
+                                }
+                        }
+                        is == "\0" {
+                                tokens.push_back({.Eof, "", line, column});
+                                break;
+                        }
+                        is _ {
+                                tokenizationError = format("unknown token: \"{current}\", Line: {line:<10}, Column: {column:<10}");
+                        }
+        		column += columnShift;
+        	}
+        }
+        return tokens;
+}
+
+auto to_string(const Token token) -> const char* {
+        auto type = token.type;
+        if type {
+                case .Illegal: return "Illegal";
+                case .Eof: return "Eof";
+                case .Identifier: return "Identifier";
+                case .Exalt: return "Exalt";
+                case .Number: return "Number";
+                case .String: return "String";
+                case .Enum: return "Enum";
+                case .Union: return "Union";
+                case .Choice: return "Choice";
+                case .If: return "If";
+                case .Case: return "Case";
+                case .For: return "For";
+                case .Continue: return "Continue";
+                case .Break: return "Break";
+                case .True: return "True";
+                case .False: return "False";
+                case .Not: return "Not";
+                case .And: return "And";
+                case .Or: return "Or";
+                case .Xor: return "Xor";
+                case .Nand: return "Nand";
+                case .Nor: return "Nor";
+                case .Xnor: return "Xnor";
+                case .Tilde: return "Tilde";
+                case .Bang: return "Bang";
+                case .Adress: return "Adress";
+                case .Hash: return "Hash";
+                case .Dollar: return "Dollar";
+                case .Percent: return "Percent";
+                case .Hat: return "Hat";
+                case .Ampersand: return "Ampersand";
+                case .Asterisk: return "Asterisk";
+                case .Minus: return "Minus";
+                case .Underscore: return "Underscore";
+                case .Plus: return "Plus";
+                case .Equal: return "Equal";
+                case .SemiColon: return "SemiColon";
+                case .Colon: return "Colon";
+                case .SingleQuote: return "SingleQuote";
+                case .Comma: return "Comma";
+                case .Dot: return "Dot";
+                case .ForwardSlash: return "ForwardSlash";
+                case .QuestionMark: return "QuestionMark";
+                case .BackwardSlash: return "BackwardSlash";
+                case .VerticalBar: return "VerticalBar";
+                case .LParen: return "LParen";
+                case .RParen: return "RParen";
+                case .LBracket: return "LBracket";
+                case .RBracket: return "RBracket";
+                case .LCurly: return "LCurly";
+                case .RCurly: return "RCurly";
+                case .LAngle: return "LAngle";
+                case .RAngle: return "RAngle";
+                case .IncrementOperator: return "IncrementOperator";
+                case .DecrementOperator: return "DecrementOperator";
+                case .LeftShiftOperator: return "LeftShiftOperator";
+                case .RightShiftOperator: return "RightShiftOperator";
+                case .DoubleColon: return "DoubleColon";
+                case .ColonEqual: return "ColonEqual";
+                case .IsEqual: return "IsEqual";
+                case .NotEqual: return "NotEqual";
+                case .RangeOperator: return "RangeOperator";
+                defaule : return nullptr;
+        }
+}

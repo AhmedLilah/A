@@ -1,0 +1,76 @@
+// Initializing the file for digital verification code
+// This means that the code here will be executed in the simulation loop
+// The functions here aren't modules that get synthasised to hardware
+// Module instantiation here is presestant:
+//      mening, the module instant sees the changes in the input
+//      that happen after the instantiation
+#setModuleType("DigitalVerification");
+
+#setTimeStep(1n);
+#setTimeResolution(1p)
+
+#load("digital.abstract");
+
+
+Arithmatic_TB :: () {
+
+        // defining pins
+        a, b, opcode : [7:0] bit;
+        clk : bit;
+        y : [7:0] bit;
+
+        // instantiating the module
+        y :: Arithmatic(a, b, opcode, clk);
+
+        main :: () {
+                // initial state
+                a       = 0h00;
+                b       = 0h00;
+                opcode  = 0h00;
+                clk     = 0h0;
+                delay(10);
+
+                // clock high, 64-bit signed integer addition
+                a       = 0hF0;
+                b       = 0h0F;
+                opcode  = 0h00;
+                clk     = 0h1;
+                delay(10);
+
+                // clock low
+                clk     = 0h0;
+                delay(10);
+
+                // clock high, 64-bit signed integer subtraction
+                opcode  = 0h01;
+                clk     = 0h1;
+                delay(10);
+
+                // clock low
+                clk     = 0h0;
+                delay(10);
+
+                // clock high, 64-bit signed integer multiplication
+                opcode  = 0h01;
+                clk     = 0h1;
+                delay(10);
+
+                // clock low
+                clk     = 0h0;
+                delay(10);
+
+                // clock high, 64-bit signed integer division
+                opcode  = 0h01;
+                clk     = 0h1;
+                delay(10);
+
+                // clock low
+                clk     = 0h0;
+                delay(10);
+
+                // clock high, 64-bit signed integer modulus
+                opcode  = 0h01;
+                clk     = 0h1;
+                delay(10);
+        }
+}
