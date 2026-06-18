@@ -1,7 +1,0 @@
-#setModuleType("Software");
-
-abstract :: #include("include/mainRoutine.abstract");
-
-main :: () {
-        abstract.runCompilerRoutine();
-}

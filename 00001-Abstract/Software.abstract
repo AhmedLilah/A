@@ -1,6 +1,6 @@
 #import "Software/Basics.A"
 
-// main function 
+// main function
 main :: () {
     print("Hello, World!");
 }
@@ -8,7 +8,7 @@ main :: () {
 // Variable/Constant declaration.
 identifier : |type| : value;
 
-Pi :: 3.14; // f64 
+Pi :: 3.14; // f64
 
 counter : u8 : 255;
 
@@ -18,16 +18,16 @@ identifier : |type| = value;
 area := Pi * 2.0; // f64
 area = 0;
 
-areaf32 : f32 = (Pi * 2.0) as f32; 
+areaf32 : f32 = (Pi * 2.0) as f32;
 
 undeclVar : s64;
 
 undeclVar = 100823;
 
 
-// varialbe/constants packing/unpacking 
-identifier := value, value; // packing 
-identifier := (value1, value2); // tuple 
+// varialbe/constants packing/unpacking
+identifier := value, value; // packing
+identifier := (value1, value2); // tuple
 
 
 pos :: (40, 22);
@@ -49,7 +49,7 @@ if ok {
 
 
 // nested packing/unpacking
-// (bool, RGB, Encoding) 
+// (bool, RGB, Encoding)
 
 
 ok, (R, G, B), encoding := calculationSomeColor();
@@ -101,11 +101,11 @@ byte
 // procedure
 binaryAnd :: (A : [8] bit, B : [8] bit) -> Y : b8 {
         Y = A & B;
-        A = 0b0000111; // Error: input parameter can't be assigned 
+        A = 0b0000111; // Error: input parameter can't be assigned
         B = 0b0101010; // sucess.
 }
 
-// form hardware prespective 
+// form hardware prespective
 fullAdder :: (A : [7] bit, B : [7] bit) -> Y : b8 {
         Y = A & B;
 }
@@ -124,10 +124,10 @@ func(.x = _, .y = 10);
 y := 23;
 func(getXValueFromuser(), 23, 32);
 
-// generic progamming 
+// generic progamming
 add :: (lhs : _, rhs : _) -> result : _ {
-    result = lhs + rhs;   
-}  
+    result = lhs + rhs;
+}
 
 // C
 struct rgba {
@@ -190,16 +190,16 @@ procName :: () {
 
 // structs
 strcutName :: {
-        dataMemberName : type, 
-        dataMemberName : type, 
-        dataMemberName : type, 
-        dataMemberName : type, 
+        dataMemberName : type,
+        dataMemberName : type,
+        dataMemberName : type,
+        dataMemberName : type,
 }
 
 // tuples
 tupleNaem :: {type, type, type}
 
-// procedure 
+// procedure
 name :: (paramter: type) -> type {}                                             // return type
 name :: (paramter: type) -> namedreturn : type {};                              // named return type
 name :: (paramter: type) -> (type,type) {};                                     // tuple
@@ -220,7 +220,7 @@ name :: (paramter: type) -> namedreturn : type {
 
 name :: (paramter: type) -> (type,type) {
         // implementation.
-        
+
         return tupleValue;
         return vlaue, value;
 }
@@ -235,7 +235,7 @@ name :: (paramter: type) -> Name : (type,type) {
 DDRBus :: {
       Address   : [64] bit,
       Data      : [64] bit,
-      ReadWrite : bit,  
+      ReadWrite : bit,
 }
 
 Adder :: (A : [8] bit, B : [8] bit, Cin : bit) -> Sum : [8] bit, Cout : bit {
@@ -243,7 +243,7 @@ Adder :: (A : [8] bit, B : [8] bit, Cin : bit) -> Sum : [8] bit, Cout : bit {
 }
 
 memoryController :: (memeoryInterfqace : DDRBus)   {
-        
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -272,7 +272,7 @@ procName :: (param1 : T, param2 : T , param3 : bool) -> void {
 procName :: (param1 : f64, param2 : f64) {
         param1 = x; // error
 
-} 
+}
 
 //parameter passing type??
 // compiler decides the paramerter passing type.
@@ -280,20 +280,20 @@ procName :: (param1 : f64, param2 : f64) {
 
 ///////////// calling/instantiation /////////////
 
-// tuple 
+// tuple
 
-// instantiating the tuple 
+// instantiating the tuple
 tupleVariable  : TupleName(s8);
 
 // instantiating a struct.
 structVariable : StructName(s8);
 
-// calling the function 
+// calling the function
 procName(5, 50, true);
 
 
 /////////////// considirations //////////////
-// 1. should we even bother with tuples 
+// 1. should we even bother with tuples
 
 ///////////// declaration /////////////
 ///////////// Second take /////////////
@@ -315,15 +315,15 @@ procName :: block/proc (param1 : s16, param2 : _ , param3 : bool) {
 }
 
 ///////////// calling/instantiation /////////////
-// tuple 
+// tuple
 
-// instantiating the tuple 
+// instantiating the tuple
 tupleVariable  : TupleName(s8);
 
 // instantiating a struct.
 structVariable : StructName(s8);
 
-// calling the function 
+// calling the function
 procName(5, 50, true);
 
 ///////////// declaration /////////////
@@ -346,14 +346,14 @@ procName :: <T> (param1 : s16, param2 : T , param3 : bool) {
 }
 
 ///////////// calling/instantiation /////////////
-// tuple 
-// instantiating the tuple 
+// tuple
+// instantiating the tuple
 tupleVariable  : TupleName<s8>;
 
 // instantiating a struct.
 structVariable : StructName<s8>;
 
-// calling the function 
+// calling the function
 procVariable   : procName<s8>;
 // defining a generic vector.
 Vector(T) :: struct {
@@ -372,7 +372,7 @@ Vector(T).pushBack :: (value : T) -> ok : bool {
                 .size++;
                 ok = true;
         }
-                
+
         if size < capacity {
         // happy path: there is enough space to push back.
                 pushAndUpdate(.capacity);
@@ -423,7 +423,7 @@ slaries : Vector(f32);
 // freeing the memory at the end of scope.
 defer salaries.free();
 
-// populating the vector with data. 
+// populating the vector with data.
 for idx in 0..10 {
         salaries.pushBack(it);
 }
@@ -438,7 +438,7 @@ for idx in 0..10 {
 
 // new operator overloading syntax.
 // a LaTeX like syntax.
-`\sum_{start}^{end} {expression}` :: (start : ssize, end : ssize, expression : #string) -> sum : f64 { 
+`\sum_{start}^{end} {expression}` :: (start : ssize, end : ssize, expression : #string) -> sum : f64 {
         sum = 0;
         for index in start..(end+1) {
                 sum += #insert Expression;
